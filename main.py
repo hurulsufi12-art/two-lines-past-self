@@ -24,6 +24,14 @@ TEXT = (
 MAX_CHARS = 280
 
 
+def is_single_sentence(line):
+    """Return True iff line is a non-empty line with exactly one
+    sentence-terminal mark (one of ., !, ?)."""
+    if not line.strip():
+        return False
+    return line.count(".") + line.count("!") + line.count("?") == 1
+
+
 def validate(text):
     """Return True iff text passes the sealed scorer's gate (RULES.txt):
     UTF-8, 1 to 280 chars, not only whitespace, exactly two lines, one
@@ -44,9 +52,7 @@ def validate(text):
     if len(lines) != 2:
         return False
     for line in lines:
-        if not line.strip():
-            return False
-        if line.count(".") + line.count("!") + line.count("?") != 1:
+        if not is_single_sentence(line):
             return False
     return True
 
